@@ -64,6 +64,5 @@ class DataSource(
     } finally {
       lock.unlock()
     }
-
   }
 }

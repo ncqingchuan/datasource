@@ -29,26 +29,24 @@ object App {
       "",
       minSize = 1,
       maxSize = 3,
-      keepAliveTimeout = 2000
+      keepAliveTimeout = 1000
     )
-    for (i <- 1 to 5) {
+    for (i <- 1 to 15) {
       val thread: Thread = new Thread(() => {
-
         using(pool.getConenction()) { con =>
           {
             using(new DbCommand(con)) { cmd =>
               {
-                cmd.commandText = "select BrandKey,BrandName from dimbrand where brandkey<?"
+                cmd.commandText = "select BrandKey,BrandName from dimbrand where brandkey=?"
                 cmd.Parameters.append(new DbParameter("@id", i))
-                val list = cmd.ExecuteResultSet[data]()
-                println(s"Thread:${Thread.currentThread().getName()},size=${list.size}")
+                cmd.ExecuteResultSet[data]().foreach(t => println(s"Thread:${Thread.currentThread().getName()},BrandName=${t.BrandName}"))
               }
             }
           }
         }
       })
       thread.start()
+      Thread.sleep(100)
     }
-
   }
 }

@@ -11,8 +11,7 @@ class DbConnection(
 ) extends AutoCloseable {
 
   private[pool] var used: Boolean = false
-  private[pool] val innerConnection: Connection =
-    DriverManager.getConnection(url, user, password)
+  private[pool] val innerConnection: Connection = DriverManager.getConnection(url, user, password)
 
   def close(): Unit = {
     if (used) {
@@ -31,5 +30,4 @@ class DbConnection(
   def CreateCommand(): DbCommand = {
     new DbCommand(this)
   }
-
 }

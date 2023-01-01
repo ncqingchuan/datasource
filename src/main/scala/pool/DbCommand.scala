@@ -12,15 +12,15 @@ import scala.reflect.ClassTag
 import scala.reflect.runtime.{universe => ru}
 
 import Dispose.using
+import java.{util => ju}
 
 class DbCommand(val connection: DbConnection, var commandText: String = null, val queryTimeout: Integer = 30) extends AutoCloseable {
-
-  val Parameters: Buffer[DbParameter] = new ArrayBuffer[DbParameter]()
-  private val mirror = ru.runtimeMirror(getClass().getClassLoader())
-  private var statement: CallableStatement = null
   if (queryTimeout < 0) {
     throw new IllegalArgumentException(s"timeout (${queryTimeout}) value is greater than 0.")
   }
+  val Parameters: Buffer[DbParameter] = ArrayBuffer[DbParameter]()
+  private val mirror = ru.runtimeMirror(getClass().getClassLoader())
+  private var statement: CallableStatement = null
 
   /** @author:qingchuan
     *
@@ -71,7 +71,7 @@ class DbCommand(val connection: DbConnection, var commandText: String = null, va
         }
         result += consMethodMirror.apply(values: _*).asInstanceOf[T]
       }
-    });
+    })
     result
   }
 

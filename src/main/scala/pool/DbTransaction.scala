@@ -18,6 +18,11 @@ class DbTransaction(private val connection: DbConnection) {
   def getConnection(): DbConnection = {
     connection
   }
+
+  def getTransactionIsolation() {
+    connection.innerConnection.getTransactionIsolation()
+  }
+  
 }
 
 object IsolationLevel {
