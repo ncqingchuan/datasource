@@ -16,7 +16,7 @@ import java.{util => ju}
 
 class DbCommand(val connection: DbConnection, var commandText: String = null, val queryTimeout: Integer = 30) extends AutoCloseable {
   if (queryTimeout < 0) {
-    throw new IllegalArgumentException(s"timeout (${queryTimeout}) value is greater than 0.")
+    throw new IllegalArgumentException(s"timeout (${queryTimeout}) value must be greater than 0.")
   }
   val Parameters: Buffer[DbParameter] = ArrayBuffer[DbParameter]()
   private val mirror = ru.runtimeMirror(getClass().getClassLoader())
@@ -98,7 +98,8 @@ class DbCommand(val connection: DbConnection, var commandText: String = null, va
       obj.sum
     } catch {
       case e: Exception => {
-        trans.RollBack()
+        if (trans != null)
+          trans.RollBack()
         throw e
       }
     }
